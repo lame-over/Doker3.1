@@ -10,7 +10,7 @@ jobs:
         with:
           python-version: '3.8'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+      - run: pip install poetry && poetry install
       - name: SonarQube Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
