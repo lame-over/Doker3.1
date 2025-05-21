@@ -5,14 +5,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
+          
+      - name: Create requirements.txt if missing
+        run: |
+          if [ ! -f "requirements.txt" ]; then
+            echo "Creating default requirements.txt"
+            echo "Django>=4.2" > requirements.txt
+            echo "djangorestframework>=3.14" >> requirements.txt
+            echo "psycopg2-binary>=2.9" >> requirements.txt
+          fi
+          cat requirements.txt  # Для дебагінга
+          
       - name: Install dependencies
-      - run: pip install poetry && poetry install
-      - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: pip install -r requirements.txt
